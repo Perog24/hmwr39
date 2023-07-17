@@ -1,0 +1,79 @@
+.TodoFormWrapper{
+   width :98%;
+   height: 100vh;
+   margin: auto;
+   display: flex;
+   border: 2px solid black;
+   .form{
+      width: 30%;
+      min-width: 180px;
+      margin-right: 10px;
+   }
+   label {
+      font-size: 0.9rem;
+      margin-left: 8px;
+   }
+   button{
+      margin: 10px 5% ;
+      width: 90%;
+   }
+   .error{
+      color: red;
+      font-size: 0.8rem;
+      font-family:monospace;
+      margin: 0 2% ;
+   }
+}
+.todoWrapper{
+   display: flex;
+   flex-wrap: wrap;
+   column-gap: 10px;
+   height: 33%;
+ 
+}
+.todo{
+   width: 200px;
+   height: 210px;
+   background-image: url('../CSS/IMG/sticer.png');
+   background-repeat: no-repeat;
+   background-size: cover;
+   padding: 30px 0 0 10px;
+   text-shadow: 1px 1.5px gray;
+   button{
+      width: 30%;
+   }
+   span{
+      cursor: pointer;
+   }
+}
+
+.field{
+   display: flex;
+   margin: auto;
+   width: 94%;
+   height: 20px;
+}
+@media screen and (max-width:478px) {
+   .TodoFormWrapper{
+      flex-direction: column;
+      max-width: none;
+      width : 96%;
+      min-width: 368px;
+      height: 100vh;
+      .form{
+         width: 96%;
+         margin: 10px 2%;
+         min-width: 358px;
+      }
+   }
+   .todo{
+      margin: auto;
+      width: 66%;
+      height: 250px;
+      padding: 30px 0 0 10px;
+      text-shadow: 1px 1px gray;
+      button{
+         width: 30%;
+      }
+   }
+}
