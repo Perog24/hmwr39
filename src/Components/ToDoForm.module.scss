@@ -1,6 +1,7 @@
 .TodoFormWrapper{
    width :98%;
    height: 100vh;
+   overflow-y: auto;
    margin: auto;
    display: flex;
    border: 2px solid black;
@@ -38,7 +39,7 @@
    background-repeat: no-repeat;
    background-size: cover;
    padding: 30px 0 0 10px;
-   text-shadow: 1px 1.5px gray;
+   text-shadow: 1px 1px gray;
    button{
       width: 30%;
    }

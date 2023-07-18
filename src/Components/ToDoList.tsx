@@ -7,14 +7,19 @@ import styles from './ToDoForm.module.scss';
 
 interface TodoFormValues {
   id: number | null;
-  doName: string;
+  user: string;
   title: string;
   content: string;
   completed: boolean;
 }
+interface IUsers{
+  id: number;
+  name: string;
+  [key:string]:any
+}
 
 const validationSchema = Yup.object().shape({
-  doName: Yup.string().required("Executor name is required"),
+  user: Yup.string().required("Executor name is required"),
   title: Yup.string().required("Title is required"),
   content: Yup.string().required("Content is required"),
 });
@@ -23,7 +28,7 @@ const TodoForm = (): JSX.Element => {
   const [formData, setFormData] = useState<TodoFormValues[] >([]);
   const [isRedact, setIsRedact] = useState<boolean[]>([]);
   const [filter, setFilter] = useState<string>("All");
-  const [users, setUsers] = useState<[] | null>([])
+  const [users, setUsers] = useState<IUsers[]>([])
   
   useEffect(()=>{
     let savedTodo:string | null = localStorage.getItem('ToDoList');
@@ -32,24 +37,23 @@ const TodoForm = (): JSX.Element => {
       setIsRedact(new Array(JSON.parse(savedTodo).length).fill(true));
     }  
     const fetchUsers = async () => {
-      try{
+    
         const response = await getUsers();
       setUsers(response);
-      }catch(error){
-        console.log(error);  
-    }};
+    }
     fetchUsers();     
   }
   ,[]);
-    
+      
+  const handleSubmit = (values: TodoFormValues, actions: any): void => {
+    setFormData([...formData, values]);
+    setIsRedact([...isRedact, true]);
+    actions.resetForm(); 
+  };
+  
   useEffect(() => {
     localStorage.setItem('ToDoList', JSON.stringify(formData));
   }, [formData]);
-
-  const handleSubmit = (values: TodoFormValues, actions: any): void => {
-    setFormData((prevState)=>[...prevState, values]);
-    setIsRedact((prevState)=>[...prevState, true]);
-  };
 
   const delItem = (index:number) =>{
     setFormData((prevState)=>prevState.filter((_,i)=>i!==index));
@@ -89,25 +93,33 @@ const TodoForm = (): JSX.Element => {
       <Formik 
         initialValues={{
           id: null,
-          doName: "",
+          user: "",
           title: "",
           content: "",
           completed: false,
+          // users: []
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         <Form  className={styles.form}>
-          <label htmlFor="doName">Executor name:</label>
-          <Field className={styles.field} id="doName" name="doName" placeholder="John" />
-          <ErrorMessage className={styles.error} name="doName" component="div" />
+          <label htmlFor="user">Executor name:</label>
+          {/* <Field className={styles.field}  name="doName" placeholder="John" /> */}
+          {/* <ErrorMessage className={styles.error} name="doName" component="div" /> */}
+          <Field
+             component="select"
+             name="user"
+             className={styles.field}             
+           >
+             {users.map((user, index)=>(<option key={index} value={user.name}>{user.name}</option>))}
+           </Field>
 
           <label htmlFor="title">Title:</label>
-          <Field className={styles.field} id="title" name="title" placeholder="Title" />
+          <Field className={styles.field}  name="title" placeholder="Title" />
           <ErrorMessage className={styles.error} name="title" component="div" />
 
           <label htmlFor="content">Content:</label>
-          <Field className={styles.field} id="content" name="content" placeholder="Content" type="text" />
+          <Field className={styles.field}  name="content" placeholder="Content" type="text" />
           <ErrorMessage className={styles.error} name="content" component="div" />
 
           <button type="submit">Submit</button>
@@ -125,7 +137,7 @@ const TodoForm = (): JSX.Element => {
         <div className={styles.todoWrapper}>
           {filteredData.map((todo: TodoFormValues, index: number) => (
             <div key={index} className={styles.todo}>
-              <h4>{todo.doName}</h4>
+              <h4>{todo.user}</h4>
               <p>{todo.title}</p>
               {isRedact[index] ? (
                 <p key={index} onClick={() => toggleRedact(index)}>
