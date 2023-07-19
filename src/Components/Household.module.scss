@@ -1,0 +1,33 @@
+.mainWrapper{
+   text-align: center;
+   background-color: coral;
+   padding: 10px;
+   min-height: 100vh;
+}
+.HouseholdWrapper{
+   display: flex;
+   justify-content: center;
+}
+.todo{
+   width: 200px;
+   height: 210px;
+   background-image: url('../CSS/IMG/sticer.png');
+   background-repeat: no-repeat;
+   background-size: cover;
+   padding: 30px 0 0 15px;
+   text-shadow: 1px 1px gray; 
+   h5{
+      margin: 3px auto;
+      text-decoration: underline;
+   }
+   p{
+      width: 180px;
+      margin: 2px 2px;
+      overflow: auto;
+      word-wrap: break-word;
+   }
+   .content{
+      height: 44px;
+      
+   }
+}

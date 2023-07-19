@@ -4,14 +4,16 @@
    overflow-y: auto;
    margin: auto;
    display: flex;
-   border: 2px solid black;
+   border: 2px solid rgb(224, 78, 78);
+   background-color: coral;
    .form{
       width: 30%;
       min-width: 180px;
       margin-right: 10px;
+      
    }
    label {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       margin-left: 8px;
    }
    button{
@@ -43,17 +45,25 @@
    background-size: cover;
    padding: 30px 0 0 10px;
    text-shadow: 1px 1px gray;
+   word-wrap: break-word;
    button{
       width: 30%;
+      border-radius: 10px;
+      border-color: coral;
    }
    span{
       cursor: pointer;
    }
    h5{
       margin: 3px auto;
+      text-decoration: underline;
+      cursor: pointer;
    }
    p{
-      margin: 2px auto;
+      width: 180px;
+      margin: 2px 2px;
+      max-height: 48px;
+      overflow: auto;
    }
 }
 
@@ -62,7 +72,13 @@
    margin: auto;
    width: 94%;
    height: 20px;
+   option{
+      background-color: rgb(240, 145, 111);      
+   }
+   
+   
 }
+
 @media screen and (max-width:478px) {
    .TodoFormWrapper{
       flex-direction: column;

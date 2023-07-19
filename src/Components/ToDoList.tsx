@@ -30,14 +30,15 @@ const validationSchema = Yup.object().shape({
   id: Yup.number(),
   user: Yup.string().required("Executor name is required"),  
   title: Yup.string().required("Title is required"),
-  content: Yup.string().required("Content is required"),
+  content: Yup.string().required("Content is required").max(60,"To long"),
 });
 
 const TodoForm = (): JSX.Element => {
   const [formData, setFormData] = useState<TodoFormValues[] >([]);
   const [isRedact, setIsRedact] = useState<boolean[]>([]);
   const [filter, setFilter] = useState<string>("All");
-  const [users, setUsers] = useState<IUsers[]>([])
+  const [users, setUsers] = useState<IUsers[]>([]);
+  const[toDoCounter, setToDOCounter] = useState<number>(0);
   const navigation = useNavigate();
 
   useEffect(()=>{
@@ -50,7 +51,7 @@ const TodoForm = (): JSX.Element => {
         const response = await getUsers();
       setUsers(response);
     }
-    fetchUsers();     
+    fetchUsers();         
   }
   ,[]);
       
@@ -60,15 +61,13 @@ const TodoForm = (): JSX.Element => {
       values.id = userOne.id;
     }
     setFormData([...formData, values]);
-    setIsRedact([...isRedact, true]);
-    console.log(formData);
-    
-    actions.resetForm();
-    
+    setIsRedact([...isRedact, true]);   
+    actions.resetForm();    
   };
   
   useEffect(() => {
     localStorage.setItem('ToDoList', JSON.stringify(formData));
+    setToDOCounter(formData.length)
   }, [formData]);
 
   const delItem = (index:number) =>{
@@ -107,15 +106,21 @@ const TodoForm = (): JSX.Element => {
   const userData = (content:string)=>{
     const user = users.find((user) => user.name === content);    
     if (user) {
-      const userToDo = formData.filter((todo,)=>todo.id === user.id)
-      navigation(`/userInfo/${user.id}`, {state:{user, userToDo }})
+      const userToDo = formData.filter((todo,)=>todo.id === user.id);
+      navigation(`/userInfo/${user.id}`, {state:{user, userToDo }});
     } else {
       return;
     }
   }
+  const typeSelect = (type:string) =>{
+    const todoTypeArr = formData.filter((todo,)=> todo.type === type);
+    navigation(`/${(type).replace(/\s/g, '_')}`, {state:{todoTypeArr }});
+
+  }
 
   return (
     <div className={styles.TodoFormWrapper}>
+      <div>
       <Formik 
         initialValues={{
           id: 0,
@@ -168,12 +173,14 @@ const TodoForm = (): JSX.Element => {
       </div>
         </Form>
       </Formik>
+        <h4>Number of tasks: {toDoCounter}</h4>
+        </div>
       {filteredData.length > 0 && (
         <div className={styles.todoWrapper}>
           {filteredData.map((todo: TodoFormValues, index: number) => (
             <div key={index} className={styles.todo}>
               <h4 onClick={(e)=>userData(todo.user)}>{todo.user}</h4>
-              <h5>{todo.type}</h5>
+              <h5 onClick={()=>typeSelect(todo.type)}>{todo.type}</h5>
               <p>{todo.title}</p>
               {isRedact[index] ? (
                 <p key={index} onClick={() => toggleRedact(index)}>

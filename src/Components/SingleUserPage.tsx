@@ -5,9 +5,7 @@ import { NavLink } from 'react-router-dom';
  
 const SingleUserPage = ():JSX.Element=> {
    const {user, userToDo} = useLocation().state;
-   const {city, street, suite} = user.address;
-   console.log(user);
-   console.log(userToDo);
+   const {city, street, suite} = user.address;   
    return <div className={style.singleUserPageWrapper} >  
       
       <div className={style.userInfoWrapper}> 
@@ -24,8 +22,9 @@ const SingleUserPage = ():JSX.Element=> {
           {userToDo.map((todo:any, index: number) => (
             <div key={index} className={style.todo}>
               <h4 >{todo.user}</h4>
+              <h5>{todo.type}</h5>
               <p>{todo.title}</p>
-              <p key={index}><span>{todo.content}</span></p>
+              <p key={index} className={style.content}><span>{todo.content}</span></p>
               {todo.completed ? (<h3>Done</h3>) : (<h3>Processed</h3>)}
             </div>))}
       </div>
