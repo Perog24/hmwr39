@@ -9,6 +9,7 @@ import styles from './ToDoForm.module.scss';
 interface TodoFormValues {
   id: number ;
   user: string;
+  type: string;
   title: string;
   content: string;
   completed: boolean;
@@ -18,10 +19,16 @@ export interface IUsers{
   name: string;
   [key:string]:any
 }
+enum TodoType {
+  HOME = "household chores",
+  OFFICE = "office",
+  DISTANT = "distant work",
+  FREELANCE = "freelance"
+}
 
 const validationSchema = Yup.object().shape({
   id: Yup.number(),
-  user: Yup.string().required("Executor name is required"),
+  user: Yup.string().required("Executor name is required"),  
   title: Yup.string().required("Title is required"),
   content: Yup.string().required("Content is required"),
 });
@@ -54,6 +61,8 @@ const TodoForm = (): JSX.Element => {
     }
     setFormData([...formData, values]);
     setIsRedact([...isRedact, true]);
+    console.log(formData);
+    
     actions.resetForm();
     
   };
@@ -111,6 +120,7 @@ const TodoForm = (): JSX.Element => {
         initialValues={{
           id: 0,
           user: "",
+          type: TodoType.HOME,
           title: "",
           content: "",
           completed: false,          
@@ -118,8 +128,7 @@ const TodoForm = (): JSX.Element => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form  className={styles.form}>
-          
+        <Form  className={styles.form}>          
           <label htmlFor="user">Executor name:</label>
           <Field
              component="select"
@@ -127,6 +136,17 @@ const TodoForm = (): JSX.Element => {
              className={styles.field}             
            >
              {users.map((user, index)=>(<option key={index} value={user.name}>{user.name}</option>))}
+           </Field>
+           <label htmlFor="type">To do type:</label>
+           <Field
+            component="select"
+             name="type"
+             className={styles.field}
+           >
+            <option value={TodoType.HOME}>{TodoType.HOME}</option>
+            <option value={TodoType.OFFICE}>{TodoType.OFFICE}</option>
+            <option value={TodoType.DISTANT}>{TodoType.DISTANT}</option>
+            <option value={TodoType.FREELANCE}>{TodoType.FREELANCE}</option>
            </Field>
 
           <label htmlFor="title">Title:</label>
@@ -153,6 +173,7 @@ const TodoForm = (): JSX.Element => {
           {filteredData.map((todo: TodoFormValues, index: number) => (
             <div key={index} className={styles.todo}>
               <h4 onClick={(e)=>userData(todo.user)}>{todo.user}</h4>
+              <h5>{todo.type}</h5>
               <p>{todo.title}</p>
               {isRedact[index] ? (
                 <p key={index} onClick={() => toggleRedact(index)}>
